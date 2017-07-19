@@ -9,8 +9,10 @@ import seller from './components/seller/seller'
 import './common/stylus/index.styl'
 
 import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
 
 Vue.use(VueRouter)
+Vue.use(VueResource)
 
 Vue.config.productionTip = false
 /* routes */

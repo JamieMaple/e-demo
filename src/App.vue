@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- header -->
-    <v-header></v-header>
+    <v-header v-bind:seller="seller"></v-header>
     <div class="tab">
       <div class="tab-item border-1px">
         <router-link v-bind:to="'/goods'">
@@ -26,14 +26,28 @@
 
 <script>
 import vHeader from './components/header/header'
+
+const ERR_OK = 0
+
 export default {
-  components: {
-    vHeader
-  },
   data(){
     return {
-      seller: {},
+      seller: {}
     }
+  },
+  created(){
+    this.$http.get('/api/seller').then((response) => {
+      // get body data
+      response = response.body
+      if (response.errno === ERR_OK){
+        this.seller = response.data
+      }
+    }, response => {
+      // error call back
+    })
+  },
+  components: {
+    vHeader
   }
 }
 </script>
