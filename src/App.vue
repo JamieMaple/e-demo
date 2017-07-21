@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- header -->
-      <router-view></router-view>
+      <router-view v-bind:seller="seller"></router-view>
   </div>
 </template>
 

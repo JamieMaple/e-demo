@@ -30,16 +30,25 @@
                   <span class="now">￥{{food.price}}</span>
                   <span v-show="food.oldPrice" class="old">￥{{ food.oldPrice }}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol v-on:add="addFood" v-bind:food="food"></cartcontrol>
+                </div>
               </div>
+
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart ref="shopcart" v-bind:delivery-price="seller.deliveryPrice" v-bind:min-price="seller.minPrice" v-bind:select-foods="selectFoods"></shopcart>
   </div>
 </template>
 
 <script>
+import shopcart from '../shopcart/shopcart'
+
+import cartcontrol from '../cartcontrol/cartcontrol'
+
 import BScroll from 'better-scroll'
 
 const ERR_OK = 0
@@ -53,11 +62,11 @@ export default {
       response = response.body
       if (response.errno === ERR_OK){
         this.goods = response.data
+        // 优化体验
         this.$nextTick(() => {
           this._initScroll()
           this._calculateHeight()
         })
-
       }
     })
   },
@@ -69,7 +78,7 @@ export default {
     }
   },
   computed: {
-    currentIndex(){
+    currentIndex() {
       for(let i = 0; i < this.listHeight.length; i++){
         let height1 = this.listHeight[i]
         let height2 = this.listHeight[i + 1]
@@ -78,6 +87,18 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods() {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count > 0){
+            foods.push(food)
+          }
+        })
+      })
+
+      return foods
     }
   },
   methods: {
@@ -90,12 +111,21 @@ export default {
 
       this.foodsScore.scrollToElement(el, 300)
     },
+    addFood(target){
+      this._drop(target)
+    },
+    _drop(target){
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target)
+      })
+    },
     _initScroll(){
       this.menuWrapper = new BScroll(this.$refs.menuWrapper, {
         click: true
       })
 
       this.foodsScore = new BScroll(this.$refs.foodsWrapper, {
+        click: true,
         probeType: 3
       })
 
@@ -113,6 +143,9 @@ export default {
         this.listHeight.push(height)
       }
     }
+  },
+  components: {
+    shopcart, cartcontrol
   }
 }
 </script>
@@ -219,5 +252,9 @@ export default {
               text-decoration line-through
               font-size 10px
               color rgb(7, 17, 27)
+          .cartcontrol-wrapper
+            position absolute
+            right 0
+            bottom 12px
 
 </style>
