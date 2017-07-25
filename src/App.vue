@@ -4,7 +4,7 @@
     <v-header v-bind:seller="seller"></v-header>
     <div class="tab">
       <div class="tab-item border-1px">
-        <router-link v-bind:to="'/goods'">
+        <router-link to="/goods">
           商品
         </router-link>
       </div>
@@ -20,27 +20,37 @@
       </div>
     </div>
     <!-- header -->
+    <keep-alive>
       <router-view v-bind:seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import vHeader from './components/header/header'
 
+import { urlParse } from './common/js/util'
+
 const ERR_OK = 0
 
 export default {
   data(){
     return {
-      seller: {}
+      seller: {
+        id: (() => {
+          let queryParm = urlParse()
+          return queryParm.id
+        })()
+      }
     }
   },
   created(){
-    this.$http.get('/api/seller').then((response) => {
+    this.$http.get('/api/seller?id='+this.seller.id).then((response) => {
       // get body data
       response = response.body
       if (response.errno === ERR_OK){
-        this.seller = response.data
+        this.seller = Object.assign({}, this.seller, response.data)
+        console.log(this.seller.id)
       }
     }, response => {
       // error call back

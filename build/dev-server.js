@@ -22,7 +22,7 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-//json data
+// mock json data
 var appData = require('../data.json')
 var seller = appData.seller
 var goods = appData.goods
