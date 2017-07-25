@@ -62,10 +62,10 @@ export default {
   created(){
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
 
-    this.$http.get('/api/goods').then((response) => {
+    this.$http.get('/static/data.json').then((response) => {
       response = response.body
-      if (response.errno === ERR_OK){
-        this.goods = response.data
+      if (response.goods){
+        this.goods = response.goods
         // 优化体验
         this.$nextTick(() => {
           this._initScroll()

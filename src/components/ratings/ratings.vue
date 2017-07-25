@@ -97,10 +97,10 @@ export default {
     }
   },
   created() {
-    this.$http.get('/api/ratings').then((response) => {
+    this.$http.get('static/data.json').then((response) => {
       response = response.body
-      if (response.errno ==- ERR_OK) {
-        this.ratings = response.data
+      if (response.ratings) {
+        this.ratings = response.ratings
         this.$nextTick(() => {
           this.scroll = new BScroll(this.$refs.ratings, {
             click: true

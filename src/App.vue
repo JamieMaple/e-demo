@@ -31,6 +31,8 @@ import vHeader from './components/header/header'
 
 import { urlParse } from './common/js/util'
 
+import axios from 'axios'
+
 const ERR_OK = 0
 
 export default {
@@ -41,19 +43,24 @@ export default {
           let queryParm = urlParse()
           return queryParm.id
         })()
-      }
+      },
+      goods: [],
+      ratings: []
     }
   },
   created(){
-    this.$http.get('/api/seller?id='+this.seller.id).then((response) => {
-      // get body data
-      response = response.body
-      if (response.errno === ERR_OK){
-        this.seller = Object.assign({}, this.seller, response.data)
-        console.log(this.seller.id)
+    axios.get('static/data.json?id='+this.seller.id).then((res) => {
+      res = res.data
+      console.log(res);
+      if (res.seller){
+        this.seller = Object.assign({}, this.seller, res.seller)
       }
-    }, response => {
-      // error call back
+      if (res.goods){
+        this.goods = res.goods
+      }
+      if (res.ratings){
+        this.ratings = res.ratings
+      }
     })
   },
   components: {
