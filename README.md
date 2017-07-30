@@ -4,7 +4,7 @@
 
 ### Demo
 
->  http://demo.jamiemaple.com
+>  http://demo.jamiemaple.com/eleme
 
 #### 练习日志
 
